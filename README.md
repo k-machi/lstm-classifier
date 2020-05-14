@@ -1,7 +1,10 @@
 # Word classification using LSTM
 
 LSTM（BiLSTM）を用いて、単語（文）の分類タスクを行います。
+
 PyTorchを用いた深層学習のためのプログラムを書いたことがなかったので、自分の勉強のために書きました。
+
+GPUが利用可能であれば、GPUを使用する仕様になっています。
 
 # Requirement
 
