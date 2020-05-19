@@ -19,7 +19,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 
 def parse_arg():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir', type=str, default='../data/toydata/',
+    parser.add_argument('--data_dir', type=str, default='../data/toy_data/',
                                                         help='data_directory')
     parser.add_argument('--model_dir', type=str, default=None,
                                                         help='model_dirctory')
@@ -259,6 +259,7 @@ def main():
     else:
         device = torch.device('cpu')
         print('device: cpu')
+    print('')
 
     if args.bidirectional == True:
         Classifier = BiLSTMClassifier
@@ -270,8 +271,10 @@ def main():
         train_examples = processor.get_train_examples(args.data_dir)
         dev_examples = processor.get_dev_examples(args.data_dir)
 
-        print('num_train_samples:', len(train_examples))
-        print('num_eval_samples:', len(dev_examples))
+        num_train_examples = sum([len(v) for k, v in train_examples.items()])
+        num_dev_examples = sum([len(v) for k, v in dev_examples.items()])
+        print('num_train_samples:', num_train_examples)
+        print('num_eval_samples:', num_dev_examples)
 
         lp = data.LabelProcessor(train_examples)
         lp.save(args.model_dir)
@@ -310,7 +313,9 @@ def main():
     if args.do_eval:
         # get_dev_examples(dict): dict[category] = list(words)
         dev_examples = processor.get_dev_examples(args.data_dir)
-        print('num_eval_samples:', len(dev_examples))
+
+        num_dev_examples = sum([len(v) for k, v in dev_examples.items()])
+        print('num_eval_samples:', num_dev_examples)
 
         if args.do_train == False:
             lp = data.LabelProcessor()
@@ -345,7 +350,8 @@ def main():
 
     if args.do_test:
         test_examples = processor.get_test_examples(args.data_dir)
-        print('num_test_samples:', len(test_examples))
+        num_test_examples = sum([len(v) for k, v in test_examples.items()])
+        print('num_test_samples:', num_test_examples)
 
         # out_file(result file) = '[data_dir]/[model_name]_result.tsv'
         out_file = args.data_dir + args.model_dir.split('/')[-2] + '_result.tsv'
@@ -383,7 +389,9 @@ def main():
 
     if args.do_predict:
         pred_examples = processor.get_target_examples(args.target_file)
-        print('num_target_samples:', len(pred_examples))
+        num_pred_examples = sum([len(v) for k, v in pred_examples.items()])
+        print('num_target_samples:', num_pred_examples)
+
         model_name = '/' + args.model_dir.split('/')[-2]
         path_name = '/'.join(args.target_file.split('/')[:-1]) + model_name
         out_file = path_name + '_result.tsv'

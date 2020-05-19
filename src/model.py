@@ -9,7 +9,7 @@ from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 class LSTMClassifier(nn.Module):
 
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_size,
-                    batch_size, num_layers=1, dropout=0.2, reset_state=False):
+                    batch_size, num_layers=1, dropout=0.1, reset_state=False):
         super(LSTMClassifier, self).__init__()
         self.hidden_dim = hidden_dim
 

@@ -2,9 +2,11 @@
 
 LSTM（BiLSTM）を用いて、単語（文）の分類タスクを行います。
 
-PyTorchを用いた深層学習のためのプログラムを書いたことがなかったので、自分の勉強のために書きました。
+トークンは、文字や[SentencePiece](https://github.com/google/sentencepiece)を利用しています。
 
 GPUが利用可能であれば、GPUを使用する仕様になっています。
+
+深層学習のためのプログラムを書いたことがなかったので、PyTorchを用いて自分の勉強のために書きました。
 
 # Requirement
 
@@ -19,11 +21,11 @@ Python 3.7
 
 **データセットの準備**
 
-著作権の観点から、データは下記の手順で用意するようにお願いします。
+データは、下記の手順で用意するようにお願いします。
 
 動作確認用のデータとして、[CHEMDNER Corpus](https://biocreative.bioinformatics.udel.edu/resources/biocreative-iv/chemdner-corpus/)を用います。
 
-`data/`内にダウンロードして解答した後、
+`data/`内にダウンロードして解凍した後、
 ```
 cd src
 python3 create_dataset.py
@@ -37,6 +39,13 @@ data/toy_data/dev.tsv
 data/toy_data/test.tsv
 ```
 
+**Google Colabを用いる場合**
+
+データセットをダウンロード後、
+`sample.ipynb`
+を参照してください。
+
+実行結果もこのファイルにあります。
 
 **学習**
 
@@ -98,14 +107,10 @@ python3 run_classifier.py \
     --sp_model=../sp_model/toy_1000/sp.model
 ```
 
-**Google Colabを用いる場合**
-
-データセットをダウンロード後、
-`sample.ipynb`
-を参照してください。
 
 # Reference
 
 * https://pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html
 * https://github.com/claravania/lstm-pytorch
 * https://qiita.com/m__k/items/841950a57a0d7ff05506
+* https://github.com/google/sentencepiece

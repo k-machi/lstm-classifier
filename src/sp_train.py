@@ -7,7 +7,7 @@ def parse_arg():
     parser.add_argument('--model_path', type=str, default='../sp_model/',
                                             help='path to save trained model')
     parser.add_argument('--train_data', type=str,
-                            default='../data/toydata/train.tsv',
+                            default='../data/toy_data/train.tsv',
                                     help='training file of sp-model')
     parser.add_argument('--vocab_size', type=int, default=1000,
                                         help='vocabulary size of sentencepiece')
