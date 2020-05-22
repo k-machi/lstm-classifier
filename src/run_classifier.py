@@ -41,6 +41,8 @@ def parse_arg():
                                         help='whether to use BiLSTM or not')
     parser.add_argument('--sp_model', type=str, default=None,
                             help='input filename if use sentencepiece model')
+    parser.add_argument('--optimizer', type=str, default='Adam',
+                                                            help='optimizer')
     parser.add_argument('--do_train', type=bool, default=False,
                                             help='whether to run training')
     parser.add_argument('--do_eval', type=bool, default=False,
@@ -266,6 +268,14 @@ def main():
     else:
         Classifier = LSTMClassifier
 
+    if args.optimizer == 'SGD':
+        Optimizer = optim.SGD
+    elif args.optimizer == 'Adam':
+        Optimizer = optim.Adam
+    else:
+        print('Optimizer:', args.optimizer, 'is not supported.' )
+        sys.exit()
+
     if args.do_train:
         # get train examples (dict): dict[category] = list(words)
         train_examples = processor.get_train_examples(args.data_dir)
@@ -285,9 +295,9 @@ def main():
             tk = spm.SentencePieceProcessor()
             tk.load(args.sp_model)
 
-        # construct char vocabulary if sp-model is not given
+        # build char vocabulary if sp-model is not given
         if not args.sp_model:
-            cv = data.CharVocabConstructor(train_examples)
+            cv = data.CharVocabBuilder(train_examples)
             cv.save_vocab(args.model_dir)
             tk = data.CharTokenizer(args.model_dir)
 
@@ -304,7 +314,8 @@ def main():
         model = Classifier(vocab_size, args.embedding_dim,
                                 args.hidden_dim, len(labels),  args.batch_size)
         model.to(device)
-        optimizer = optim.SGD(model.parameters(), lr=args.learning_rate,
+        #optimizer = optim.SGD(model.parameters(), lr=args.learning_rate,
+        optimizer = Optimizer(model.parameters(), lr=args.learning_rate,
                                                 weight_decay=args.weight_decay)
 
         model = train(model, model_file, optimizer, train_data, dev_data,

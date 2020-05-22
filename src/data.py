@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from collections import defaultdict
 
 
-class CharVocabConstructor:
+class CharVocabBuilder:
 
     def __init__(self, train_data):
         # train_data(dict): dict[category] = list(words)
